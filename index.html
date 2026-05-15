@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Napi Smart Dashboard</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -12,19 +11,17 @@
 
 <style>
 
-body{
+body {
     margin:0;
-    background:linear-gradient(135deg,#1e3a8a,#0ea5e9);
-    font-family:'Segoe UI',sans-serif;
-    overflow:hidden;
+    background: linear-gradient(135deg,#1e3a8a,#0ea5e9);
+    font-family:'Segoe UI';
 }
 
-/* HEADER */
-
-.header{
+/* HEADER CENTERED */
+.header {
     height:80px;
-    background:rgba(255,255,255,0.15);
-    backdrop-filter:blur(10px);
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
     color:white;
     display:flex;
     justify-content:center;
@@ -34,172 +31,91 @@ body{
 }
 
 /* DASHBOARD */
-
-.dashboard{
+.dashboard {
     padding:10px;
-    height:calc(100vh - 80px);
+    height: calc(100vh - 80px);
 }
 
-.col-md-6{
+.col-md-6 {
     display:flex;
     flex-direction:column;
 }
 
-.panel{
+.panel {
     flex:1;
     background:white;
     border-radius:15px;
     padding:12px;
     display:flex;
     flex-direction:column;
-    overflow:hidden;
 }
 
 /* COUNTERS */
-
-.counter-card{
+.counter-card {
     text-align:center;
     padding:10px;
     border-radius:10px;
     color:white;
-    transition:transform 0.3s;
+    transition: transform 0.3s;
 }
+.counter-card.animate {
+    transform: scale(1.08);
+}
+.big-number { font-size:2rem; font-weight:800; }
 
-.counter-card.animate{
-    transform:scale(1.08);
-}
-
-.big-number{
-    font-size:2rem;
-    font-weight:800;
-}
-
-.bg-pending{
-    background:#f59e0b;
-}
-
-.bg-complete{
-    background:#16a34a;
-}
-
-.bg-total{
-    background:#2563eb;
-}
+.bg-pending { background:#f59e0b; }
+.bg-complete { background:#16a34a; }
+.bg-total { background:#2563eb; }
 
 /* SECTION TITLES */
-
-.section-title{
+.section-title {
     padding:8px 12px;
     border-radius:8px;
     font-weight:600;
     margin-bottom:8px;
     display:block;
-    animation:fadeSlide 0.6s ease;
+    animation: fadeSlide 0.6s ease;
 }
 
-.section-pending{
-    background:linear-gradient(90deg,#f59e0b,#fbbf24);
+.section-pending {
+    background: linear-gradient(90deg,#f59e0b,#fbbf24);
     color:#1e293b;
 }
 
-.section-completed{
-    background:linear-gradient(90deg,#16a34a,#4ade80);
+.section-completed {
+    background: linear-gradient(90deg,#16a34a,#4ade80);
     color:white;
 }
 
-@keyframes fadeSlide{
-    from{
-        opacity:0;
-        transform:translateY(-5px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+@keyframes fadeSlide {
+    from {opacity:0; transform:translateY(-5px);}
+    to {opacity:1; transform:translateY(0);}
 }
 
 /* TABLE */
-
-.table-container{
+.table-container {
     flex:1;
     overflow-y:auto;
-    border-radius:12px;
 }
 
-.table{
+.table {
     background:#1e293b;
     color:#e2e8f0;
-    margin-bottom:0;
-    font-size:14px;
 }
-
-.table thead{
+.table thead {
     position:sticky;
     top:0;
     background:#0f172a;
-    z-index:10;
 }
+.table tbody tr:nth-child(odd){ background:#334155; }
+.table tbody tr:nth-child(even){ background:#475569; }
 
-.table thead th{
-    border:none;
-    color:#ffffff;
-    padding:12px 8px;
-    font-size:14px;
-}
-
-.table tbody td{
-    border:none;
-    padding:10px 8px;
-    vertical-align:middle;
-}
-
-.table tbody tr:nth-child(odd){
-    background:#334155;
-}
-
-.table tbody tr:nth-child(even){
-    background:#475569;
-}
-
-/* DATE COLUMN */
-
-.table td:nth-child(2),
-.table th:nth-child(2){
-    white-space:nowrap;
-    min-width:110px;
-    font-weight:600;
-    color:#facc15;
-}
-
-/* BADGES */
-
-.badge-pending{
-    background:#f59e0b;
-}
-
-.badge-complete{
-    background:#16a34a;
-}
+.badge-pending { background:#f59e0b; }
+.badge-complete { background:#16a34a; }
 
 /* CHART */
-
-#chartSection{
+#chartSection {
     height:300px;
-}
-
-canvas{
-    max-height:240px !important;
-}
-
-/* SCROLLBAR */
-
-::-webkit-scrollbar{
-    width:6px;
-}
-
-::-webkit-scrollbar-thumb{
-    background:#94a3b8;
-    border-radius:10px;
 }
 
 </style>
@@ -216,8 +132,7 @@ canvas{
 <div class="container-fluid dashboard">
 <div class="row h-100">
 
-<!-- LEFT SIDE -->
-
+<!-- LEFT -->
 <div class="col-md-6">
 <div class="panel">
 
@@ -232,8 +147,7 @@ canvas{
 </div>
 </div>
 
-<!-- RIGHT SIDE -->
-
+<!-- RIGHT -->
 <div class="col-md-6">
 <div class="panel">
 
@@ -245,7 +159,7 @@ canvas{
 <hr>
 
 <h6 class="section-title section-completed">
-✅ Completed (<span id="completedCount"></span>)
+Completed (<span id="completedCount"></span>)
 </h6>
 
 <div class="table-container" id="completedTable"></div>
@@ -258,379 +172,182 @@ canvas{
 
 <script>
 
-const SHEET_ID = "1qvFhUaRIriIDLOqSU-Ua8U1608x0aBM-UcO32KtiXOk";
+const SHEET_ID="1qvFhUaRIriIDLOqSU-Ua8U1608x0aBM-UcO32KtiXOk";
+let fullData=[], chart;
 
-let fullData = [];
-let chart;
-
-/* LIVE CLOCK */
-
+/* CLOCK */
 setInterval(()=>{
-
-    const now = new Date();
-
-    const bs = NepaliDate.fromAD(now);
-
-    document.getElementById("liveClock").innerHTML =
-    `${bs.format('YYYY/MM/DD')}<br>${now.toLocaleTimeString()}`;
-
+const now=new Date();
+const bs=NepaliDate.fromAD(now);
+liveClock.innerHTML=`${bs.format('YYYY/MM/DD')}<br>${now.toLocaleTimeString()}`;
 },1000);
 
-/* CSV PARSER */
-
-function parseCSV(text){
-
-    const rows = text
-    .split("\n")
-    .map(x=>x.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/));
-
-    const headers = rows[0];
-
-    return rows.slice(1).map(row=>{
-
-        let obj = {};
-
-        headers.forEach((key,i)=>{
-
-            obj[key.trim()] =
-            (row[i] || "").replace(/"/g,'');
-
-        });
-
-        return obj;
-    });
+/* CSV */
+function parseCSV(t){
+const r=t.split("\n").map(x=>x.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/));
+const h=r[0];
+return r.slice(1).map(row=>{
+let o={};
+h.forEach((k,i)=>o[k.trim()]=(row[i]||"").replace(/"/g,''));
+return o;
+});
 }
 
-/* LOAD SHEET */
-
+/* LOAD */
 function load(){
-
 fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`)
-
 .then(r=>r.text())
-
 .then(csv=>{
-
-    fullData = parseCSV(csv);
-
-    render();
-
+fullData=parseCSV(csv);
+render();
 });
-
 }
 
 /* STATUS */
-
 function getStatus(r){
-
-    const s = (r['कामको अवस्था'] || '').toLowerCase();
-
-    if(s.includes('pend')) return 'pending';
-
-    if(s.includes('comp')) return 'complete';
-
-    return 'pending';
+const s=(r['कामको अवस्था']||'').toLowerCase();
+if(s.includes('pend')) return 'pending';
+if(s.includes('comp')) return 'complete';
 }
 
-/* BUILD TABLE */
-
-function buildTable(data){
-
-let html = `
-<table class="table">
-
-<thead>
-<tr>
+/* TABLE */
+function buildTable(d){
+let html=`<table class="table"><thead><tr>
 <th>दर्ता नं.</th>
 <th>दर्ता मिति</th>
 <th>विषय</th>
 <th>नाम</th>
 <th>कर्मचारी</th>
 <th>स्थिति</th>
-</tr>
-</thead>
+</tr></thead><tbody>`;
 
-<tbody>
-`;
+d.forEach(r=>{
 
-data.forEach(r=>{
+const st=getStatus(r);
 
-    const st = getStatus(r);
+const badge=st==='pending'
+?'<span class="badge badge-pending">Pending</span>'
+:'<span class="badge badge-complete">Done</span>';
 
-    const badge =
-    st === 'pending'
-    ? '<span class="badge badge-pending">Pending</span>'
-    : '<span class="badge badge-complete">Done</span>';
-
-    const regDate =
-    r['दर्ता मिति'] ||
-    r['दर्ता मिति BS'] ||
-    '';
-
-html += `
-<tr>
-
-<td>${r['निवेदन दर्ता नं.'] || ''}</td>
-
-<td>${regDate}</td>
-
-<td>${r['विषय'] || ''}</td>
-
-<td>${r['निवेदकको नाम थर'] || ''}</td>
-
-<td>${r['फाटवाला कर्मचारी'] || ''}</td>
-
+html+=`<tr>
+<td>${r['निवेदन दर्ता नं.']||''}</td>
+<td>${r['दर्ता मिति']||''}</td>
+<td>${r['विषय']||''}</td>
+<td>${r['निवेदकको नाम थर']||''}</td>
+<td>${r['फाटवाला कर्मचारी']||''}</td>
 <td>${badge}</td>
-
-</tr>
-`;
-
+</tr>`;
 });
 
-html += `
-</tbody>
-</table>
-`;
-
-return html;
-
+return html+"</tbody></table>";
 }
-
 /* CHART */
-
 function renderChart(data){
-
 if(chart) chart.destroy();
 
-const emp = {};
-
+const emp={};
 data.forEach(r=>{
-
-    const e = r['फाटवाला कर्मचारी'] || 'Unknown';
-
-    if(!emp[e]){
-
-        emp[e] = {
-            p:0,
-            c:0
-        };
-    }
-
-    const st = getStatus(r);
-
-    if(st === 'pending') emp[e].p++;
-
-    if(st === 'complete') emp[e].c++;
-
+const e=r['फाटवाला कर्मचारी']||'Unknown';
+if(!emp[e]) emp[e]={p:0,c:0};
+const st=getStatus(r);
+if(st==='pending') emp[e].p++;
+if(st==='complete') emp[e].c++;
 });
 
-const labels = Object.keys(emp);
+const labels=Object.keys(emp);
+const maxY = Math.max(...labels.map(e=>emp[e].p + emp[e].c)) + 2;
 
-const maxY =
-Math.max(...labels.map(e=>emp[e].p + emp[e].c)) + 2;
-
-chart = new Chart(employeeChart,{
-
+chart=new Chart(employeeChart,{
 type:'bar',
-
 data:{
-
 labels,
-
 datasets:[
-
 {
 label:'Pending',
 data:labels.map(e=>emp[e].p),
 backgroundColor:'#f59e0b',
 stack:'total'
 },
-
 {
 label:'Completed',
 data:labels.map(e=>emp[e].c),
 backgroundColor:'#16a34a',
 stack:'total'
 }
-
 ]
-
 },
-
 options:{
-
 responsive:true,
-
 maintainAspectRatio:false,
-
-animation:{
-duration:1400,
-easing:'easeOutQuart'
-},
-
+animation:{duration:1400,easing:'easeOutQuart'},
 animations:{
 y:{
 from:maxY,
 delay:(ctx)=>ctx.dataIndex*120
 }
 },
-
-plugins:{
-legend:{
-labels:{
-color:'#111'
-}
-}
-},
-
 scales:{
-
-x:{
-stacked:true
-},
-
-y:{
-stacked:true,
-beginAtZero:true
+x:{stacked:true},
+y:{stacked:true,beginAtZero:true}
 }
-
 }
-
-}
-
 });
-
 }
 
-/* ANIMATE COUNTERS */
-
+/* COUNTER */
 function animateValue(el,end){
+let startTime=null;
+let duration=900;
 
-let startTime = null;
-
-const duration = 900;
-
-function step(timestamp){
-
-    if(!startTime) startTime = timestamp;
-
-    const progress =
-    Math.min((timestamp - startTime)/duration,1);
-
-    el.textContent =
-    Math.floor(progress * end);
-
-    if(progress < 1){
-
-        requestAnimationFrame(step);
-
-    }
-
+function step(ts){
+if(!startTime) startTime=ts;
+const progress=Math.min((ts-startTime)/duration,1);
+el.textContent=Math.floor(progress*end);
+if(progress<1) requestAnimationFrame(step);
 }
-
 requestAnimationFrame(step);
-
 }
 
-/* PULSE EFFECT */
-
+/* PULSE */
 function pulseCounters(){
-
-document.querySelectorAll('.counter-card')
-
-.forEach(c=>{
-
-    c.classList.add("animate");
-
-    setTimeout(()=>{
-
-        c.classList.remove("animate");
-
-    },400);
-
+document.querySelectorAll('.counter-card').forEach(c=>{
+c.classList.add("animate");
+setTimeout(()=>c.classList.remove("animate"),400);
 });
-
 }
 
 /* RENDER */
-
 function render(){
+const p=fullData.filter(r=>getStatus(r)==='pending');
+const c=fullData.filter(r=>getStatus(r)==='complete');
 
-const pending =
-fullData.filter(r=>getStatus(r)==='pending');
+pendingTable.innerHTML=buildTable(p);
+completedTable.innerHTML=buildTable(c);
 
-const completed =
-fullData.filter(r=>getStatus(r)==='complete');
+pendingCount.textContent=p.length;
+completedCount.textContent=c.length;
 
-pendingTable.innerHTML =
-buildTable(pending);
-
-completedTable.innerHTML =
-buildTable(completed);
-
-pendingCount.textContent =
-pending.length;
-
-completedCount.textContent =
-completed.length;
-
-/* COUNTERS */
-
-counters.innerHTML = `
-
-<div class="col-4">
-
-<div class="counter-card bg-pending">
-Pending
-<div id="pVal" class="big-number">0</div>
-</div>
-
-</div>
-
-<div class="col-4">
-
-<div class="counter-card bg-complete">
-Done
-<div id="cVal" class="big-number">0</div>
-</div>
-
-</div>
-
-<div class="col-4">
-
-<div class="counter-card bg-total">
-Total
-<div id="tVal" class="big-number">0</div>
-</div>
-
-</div>
-
+counters.innerHTML=`
+<div class="col-4"><div class="counter-card bg-pending">Pending<div id="pVal" class="big-number">0</div></div></div>
+<div class="col-4"><div class="counter-card bg-complete">Done<div id="cVal" class="big-number">0</div></div></div>
+<div class="col-4"><div class="counter-card bg-total">Total<div id="tVal" class="big-number">0</div></div></div>
 `;
 
-animateValue(pVal,pending.length);
-
-animateValue(cVal,completed.length);
-
+animateValue(pVal,p.length);
+animateValue(cVal,c.length);
 animateValue(tVal,fullData.length);
 
 renderChart(fullData);
-
 }
 
-/* AUTO REFRESH */
-
+/* LOOP */
 setInterval(()=>{
-
 pulseCounters();
-
 renderChart(fullData);
-
 },6000);
 
 /* INIT */
-
 load();
-
 setInterval(load,120000);
 
 </script>
