@@ -112,10 +112,11 @@ body {
 
 .filter-input{
     width:100%;
-    padding:3px 6px;
+    padding:2px 5px;
     border:none;
     border-radius:4px;
-    font-size:12px;
+    font-size:11px;
+    margin-top:3px;
 }
 
 .badge-pending { background:#f59e0b; }
@@ -227,20 +228,20 @@ let html=`<table class="table"><thead>
 <th>दर्ता नं.</th>
 
 <th>
-दर्ता मिति<br>
-<input class="filter-input" onkeyup="applyFilter('${tableType}')" id="${tableType}_date" placeholder="Filter">
+दर्ता मिति 🔍<br>
+<input class="filter-input" onkeyup="applyFilter('${tableType}')" id="${tableType}_date">
 </th>
 
 <th>
-विषय<br>
-<input class="filter-input" onkeyup="applyFilter('${tableType}')" id="${tableType}_subject" placeholder="Filter">
+विषय 🔍<br>
+<input class="filter-input" onkeyup="applyFilter('${tableType}')" id="${tableType}_subject">
 </th>
 
 <th>नाम</th>
 
 <th>
-कर्मचारी<br>
-<input class="filter-input" onkeyup="applyFilter('${tableType}')" id="${tableType}_employee" placeholder="Filter">
+कर्मचारी 🔍<br>
+<input class="filter-input" onkeyup="applyFilter('${tableType}')" id="${tableType}_employee">
 </th>
 
 <th>स्थिति</th>
