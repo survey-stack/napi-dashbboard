@@ -110,6 +110,14 @@ body {
 .table tbody tr:nth-child(odd){ background:#334155; }
 .table tbody tr:nth-child(even){ background:#475569; }
 
+.filter-input{
+    width:100%;
+    padding:3px 6px;
+    border:none;
+    border-radius:4px;
+    font-size:12px;
+}
+
 .badge-pending { background:#f59e0b; }
 .badge-complete { background:#16a34a; }
 
@@ -211,15 +219,34 @@ if(s.includes('comp')) return 'complete';
 }
 
 /* TABLE */
-function buildTable(d){
-let html=`<table class="table"><thead><tr>
+function buildTable(d,tableType){
+
+let html=`<table class="table"><thead>
+
+<tr>
 <th>दर्ता नं.</th>
-<th>दर्ता मिति</th>
-<th>विषय</th>
+
+<th>
+दर्ता मिति<br>
+<input class="filter-input" onkeyup="applyFilter('${tableType}')" id="${tableType}_date" placeholder="Filter">
+</th>
+
+<th>
+विषय<br>
+<input class="filter-input" onkeyup="applyFilter('${tableType}')" id="${tableType}_subject" placeholder="Filter">
+</th>
+
 <th>नाम</th>
-<th>कर्मचारी</th>
+
+<th>
+कर्मचारी<br>
+<input class="filter-input" onkeyup="applyFilter('${tableType}')" id="${tableType}_employee" placeholder="Filter">
+</th>
+
 <th>स्थिति</th>
-</tr></thead><tbody>`;
+</tr>
+
+</thead><tbody>`;
 
 d.forEach(r=>{
 
@@ -241,6 +268,37 @@ html+=`<tr>
 
 return html+"</tbody></table>";
 }
+
+/* FILTER */
+function applyFilter(type){
+
+const dateVal=document.getElementById(`${type}_date`).value.toLowerCase();
+
+const subjectVal=document.getElementById(`${type}_subject`).value.toLowerCase();
+
+const employeeVal=document.getElementById(`${type}_employee`).value.toLowerCase();
+
+const rows=document.querySelectorAll(`#${type}Table tbody tr`);
+
+rows.forEach(row=>{
+
+const date=row.cells[1].textContent.toLowerCase();
+
+const subject=row.cells[2].textContent.toLowerCase();
+
+const employee=row.cells[4].textContent.toLowerCase();
+
+const match=
+date.includes(dateVal) &&
+subject.includes(subjectVal) &&
+employee.includes(employeeVal);
+
+row.style.display=match ? '' : 'none';
+
+});
+
+}
+
 /* CHART */
 function renderChart(data){
 if(chart) chart.destroy();
@@ -321,8 +379,8 @@ function render(){
 const p=fullData.filter(r=>getStatus(r)==='pending');
 const c=fullData.filter(r=>getStatus(r)==='complete');
 
-pendingTable.innerHTML=buildTable(p);
-completedTable.innerHTML=buildTable(c);
+pendingTable.innerHTML=buildTable(p,'pending');
+completedTable.innerHTML=buildTable(c,'completed');
 
 pendingCount.textContent=p.length;
 completedCount.textContent=c.length;
