@@ -24,10 +24,22 @@ body {
     backdrop-filter: blur(10px);
     color:white;
     display:flex;
-    justify-content:center;
     align-items:center;
-    flex-direction:column;
+    justify-content:flex-start;
+    padding:0 20px;
+    gap:15px;
+}
+
+.header-logo{
+    width:55px;
+    height:55px;
+    object-fit:contain;
+}
+
+.header-text{
+    flex:1;
     text-align:center;
+    line-height:1.2;
 }
 
 /* DASHBOARD */
@@ -135,13 +147,14 @@ body {
 <div class="header">
 
     <img 
-    src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Emblem_of_Nepal.svg/512px-Emblem_of_Nepal.svg.png"
+    src="https://upload.wikimedia.org/wikipedia/commons/3/36/Emblem_of_Nepal.svg"
     class="header-logo"
     alt="नेपाल सरकार">
 
-    <h5 class="mb-0">नापी कार्यालय डिल्लीबजार</h5>
-
-    <small>Pending File Dashboard</small>
+    <div class="header-text">
+        <h5 class="mb-0">नापी कार्यालय डिल्लीबजार</h5>
+        <small>Pending File Dashboard</small>
+    </div>
 
     <div id="liveClock"></div>
 
